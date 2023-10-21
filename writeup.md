@@ -1,11 +1,12 @@
 # 3rd PKU Geek Game Writeup
 ## 前言
 这一周（从2023.10.13到2023.10.20） 除了写线代作业高数作业计概作业以及刷微信之外的几乎所有时间都用在了这上面，导致它结束了之后我甚至产生了不知道该干什么了的感觉（当然是捡起被抛在脑后的高数和线代）<br>
+所以说感觉应该写点什么纪念一下，让多年之后的我看到的时候能感慨一下当年怎么这么菜，然后就有了这样一篇题解和日记的杂交产物（还专门去学习了一下markdown的语法）<br>
 最后的成果：<br>
 ![img.png](img.png)<br>
 ![img_1.png](img_1.png)<br>
 ![img_2.png](img_2.png)<br>
-离35名差得远呢，所以显然这个writeup不会被交上去丢人现眼，那么写它的目的是什么呢？可能是很好奇多年后的我看到这份题解会有什么感想
+总结就是，对web一窍不通，基础知识差太多了，只有misc和binary能做，algorithm要不然连题都看不懂，（特指关键词过滤喵，谢谢喵，不知道是我语文不好还是出题人的问题，但是过的人这么多，应该是我的问题吧），要不然没来得及做
 
 ---
 
@@ -20,7 +21,7 @@
 > flag{geekgamethethird
 
 ## 小北问答
-这个题……消耗了我十分巨量的时间，并且到最后也没做出来，直接导致我前两天的精神状态非常不佳（tutorial都没做出来！）
+这个题……消耗了我十分巨量的时间，并且到最后也没做出来，直接导致我前两天的精神状态非常不佳
 
 1.第一题倒是很简单
 搜索“北京大学（校级）高性能计算平台”，得到官网[https://hpc.pku.edu.cn/](https://hpc.pku.edu.cn/)，点击使用指南-上机流程-提交作业，第一个sbatch就是
@@ -31,7 +32,7 @@ btw,之前没用过正则表达式，做这题的时候还特意去学了一下^
 
 一开始搜到了wiki，上面写着K60 Ultra的内核版本号是4.0.3，然后就直接填上了。后来经过了多次尝试，发现这个填的不对，然后搜到了一个下载最新固件的？网站[https://xiaomifirmwareupdater.com/firmware/corot/](https://xiaomifirmwareupdater.com/firmware/corot/)，发现最新的是4.0.12。但是还是不对，然后突然灵光一闪，又回去读题，发现题目问的可能是linux kernel的版本而不是MIUI的版本。（我前后加起来至少仔细看了这个题干十遍）
 
- 然后就开始了新的漫长的故事，我到处搜K60 Ultra linux kernel version，尝试了new bing，尝试了gpt的web browsing，但是全都找不到答案，过程中搜到了github上的MIUI的源代码[https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/corot-t-oss](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/corot-t-oss)然后由于缺乏软件工程/Android/linux尝试，并不知道该上哪去找linux的版本号。然后四处乱看，在某一个commit里面看到了merge Android13-5.15，然后我就知道了这个内核的android版本，然后我又到处去找Anroid13-5.15对应的linux内核版本，又搜了好久好久，还是哪都搜不到，然后询问了gwq（违反规则*1）gwq告诉我，5.15就是linux kernel的version。。。。。。觉得自己真是蠢爆了。但是，第三个数字要从哪找呢，还是不知道。期间还问了gpt，至少两次，gpt告诉我，可以去kernel目录下的Makefile里找，前三行就是版本号。![img_3.png](img_3.png)然而，kernel目录下的Makefile里并没有这三行。![img_4.png](img_4.png)然后还好几次搜到了Android build的一个网站(找不到了），上面大概写着13对应的最新linux kernel是5.15，然后15后面的数字，每当linux kernel发布lts之后会尽快更新。然后既然我在MIUI那里找不到对应的linux kernel version，就去找了linux的最新lts，但还是哪里都搜不到。。最后的最后搜到了这个[https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y)（昨天晚上竟然又发了一个更新，我看的时候最新还是5.15.135，然后我就把这个交上去了，但还是错了
+ 然后就开始了新的漫长的故事，我到处搜K60 Ultra linux kernel version，尝试了new bing，尝试了gpt的web browsing，但是全都找不到答案，过程中搜到了github上的MIUI的源代码[https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/corot-t-oss](https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/corot-t-oss)然后由于缺乏软件工程（应该是吧）的常识，并不知道该上哪去找linux的版本号。然后四处乱看，在某一个commit里面看到了merge Android13-5.15，然后我就知道了这个内核的android版本，然后我又到处去找Anroid13-5.15对应的linux内核版本，又搜了好久好久，还是哪都搜不到，然后询问了gwq（违反规则*1）gwq告诉我，5.15就是linux kernel的version。。。。。。觉得自己真是蠢爆了。但是，第三个数字要从哪找呢，还是不知道。期间还问了gpt，至少两次，gpt告诉我，可以去kernel目录下的Makefile里找，前三行就是版本号。![img_3.png](img_3.png)然而，kernel目录下的Makefile里并没有这三行。![img_4.png](img_4.png)然后还好几次搜到了Android build的一个网站(找不到了），上面大概写着13对应的最新linux kernel是5.15，然后15后面的数字，每当linux kernel发布lts之后会尽快更新。然后既然我在MIUI那里找不到对应的linux kernel version，就去找了linux的最新lts，但还是哪里都搜不到。。最后的最后搜到了这个[https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y)（昨天晚上竟然又发了一个更新，我看的时候最新还是5.15.135，然后我就把这个交上去了，但还是错了
 期间应该还有很多很多别的尝试，但是记不得了（x
 真的很痛！
 然后在比赛结束之后，在QQ群里看到，原来答案就在根目录下的Makefile里。。。。![img_5.png](img_5.png)<br>
@@ -69,7 +70,7 @@ archive.org上搜bilibili.com，2011年应该只有两个archive，并且都打�
 
 决定采用一种很新的写writeup的方法，完全按照时间顺序来写
 ## Z公司的服务器
-这道题同样对我的精神状态造成了不小的伤害 说好的“**连接到服务器即可用这种方法接收Flag1**"呢 为什么我收到的是乱码！ 然后我就是两眼一抹黑，完全不知道应该干什么。就是这种两眼一抹黑的感觉特别难受
+这道题同样对我的精神状态造成了不小的伤害 说好的“**连接到服务器即可用这种方法接收Flag1**"呢 为什么我收到的是乱码！ 然后我就是两眼一抹黑，完全不知道应该干什么
 ![img_9.png](img_9.png)
 
 然后我应该去问了gpt古老的方法是什么，gpt跟我说可能是FTP，但是显然不是，然后只能作罢
@@ -78,7 +79,7 @@ archive.org上搜bilibili.com，2011年应该只有两个archive，并且都打�
 
 然后就打开了流量包，发现里面有个.jpg，并且有FF DB，所以确实穿了个.jpg，然后就用gpt交给我的，右键，follow TCP stream，然后save as, raw，然后把后缀改成.jpg，但是打不开
 
-然后自己随便画了一个无标题.jpg，然后用010editor打开，噢对，这其中还发现了一个很好用的能看raw的软件，就是010editor，下它的时候还跟windows defender拉扯了半天。回过头来看，其实还是有不小的进步的，（比如说至少知道了一些（很多）软件，知道什么时候该用什么能解决问题，能不两眼一摸黑了）然后发现虽然有FF DB FF EO，但是后面的部分可以说差着十万八千里，还有很多重复的18 40 18 41之类的东西，然后我还去问了gpt，但是它明明知道，但就是不告诉我！太坏了md
+然后自己随便画了一个无标题.jpg，然后用010editor打开，噢对，这其中还发现了一个很好用的能看raw的软件，就是010editor，下它的时候还跟windows defender拉扯了半天。回过头来看，其实还是有不小的进步的，（比如说至少知道了一些（很多）软件，知道什么时候该用什么能解决问题，能不两眼一摸黑了）然后发现虽然有FF DB FF E0，但是后面的部分可以说差着十万八千里，还有很多重复的18 40 18 41之类的东西，然后我还去问了gpt，但是它明明知道，但就是不告诉我！太坏了md
 
 总而言之，jpg坏掉了，发现流量包里有一些跟我连到网页环境里收到的**.B00000000之类的东西很像的字符串，但并不能知道是什么，所以只能先作罢了
 
@@ -94,11 +95,16 @@ chromedriver这个东西我熟悉的很啊（ 高三一直拿这个和selenium�
 
 在看bkcrack的教程[tutorial](https://github.com/kimci86/bkcrack/blob/master/example/tutorial.md)的时候，其实发现了可以通过猜来明文攻击，12个字节（其中8个连续）就可以，并且在某天睡觉的时候想到了flag2里面的pcapng应该也是可以猜的，但是当时可能比较懒，急着去做别的题，就没有实践，然后就拖到了第二阶段开始之后，然后其实那个提示对我没有任何用处因为我早就知道了可以这么做，但还是白白少了87分，算了，算了分数不重要
 
-总之就是，去搜了一下pcapng的编码格式，然后甚至找到了两篇用pcapng明文攻击的例子，然后就照做就完事了
+总之就是，去搜了一下pcapng的编码格式，然后甚至找到了两篇用pcapng明文攻击的例子，然后就照做就完事了<br>![img_19.png](img_19.png)<br>
 
 这应该是我第一道完整解出的（除了签到题以外的）题
 
 oh 没有按照时间顺序，但是没关系
+
+update: 赛后突然发现这篇博客的开头有：
+>《量子加密》writeup by @xmcp
+
+竟然也是xmcp出的
 
 ## 汉化绿色版免费下载
 不知道我怎么想的，一开始好像是想逆向看代码来找flag来着，然后被代码长度吓退了，完全没想到用cheat engine搜一下内存
@@ -286,7 +292,7 @@ flag1应该就是正常的通关，sanity >117%就可以，当时一直在想题
 
 这道和华维码一样，浪费时间伤害感情（x
 
-周三的德法课上的几乎所有时间好像都贡献给了这道题，而且非常的愚蠢，甚至懒得写脚本， 是一个一个手动试的 （可能也是因为觉得c必然不支持这么现代的编码，python又不太会用（草） 以后要改！
+周三的德法课上的几乎所有时间好像都贡献给了这道题，而且非常的愚蠢，甚至懒得写脚本， 是一个一个手动试的 （可能也是因为觉得c必然不支持这么现代的编码，python又不太会用（草） 
 
 然后试了半天，觉得我已经穷尽了所有可能了，但是它就是不对，然后陷入了同样的绝望状态
 
@@ -353,6 +359,37 @@ with open("this", "wb") as f:
 这是第二道完整做出来的题
 
 ## Emoji Wordle
+
+第二阶段的时候又回来做这道题，毕竟它看起来肯定能做出来。然后或许是从提示里得到了提示，或许是突然灵机一动，总之我突然意识到，答案是64个emoji，而我刚刚一直在用32个emoji试。。。
+
+一开始用32个emoji可能是我直接把placeholder里的64个复制上去结果告诉我太长了 可能是出于什么bug导致有些时候一个emoji会被认作两个字符，我也不知道到底是什么原因
+
+然后我就采用了把每个emoji复制64遍交上去看它在哪的方法。并且还是手动的，真的很蠢，这道题应该对我的左手手腕造成了不小的伤害，这之后它经常嘎嘣。
+
+但是还需要确定到底有哪64个字符，一开始是手动的，后来效率越来越低，最后实在是受不了了，写了个python
+
+```python
+a = input()
+a = a.replace("\t", "")
+f = open("data.txt", "r+", encoding="utf-8")
+data = f.read()
+f.truncate(0)
+f.seek(0)
+new_data = ''
+for c in a:
+    if c not in data:
+        data = data + c
+f.write(data)
+f.close()
+
+```
+还不太会用python的文件读写，准确的说是同时读同时写一个文件。然后尽管如此我还是刷新了好多次才把那128个emoji找齐
+
+找齐了之后还是手动一个一个试的，我可能很适合去看重复体力劳动
+
+最后过是过了，但是。。。好像没什么意义
+
+然后鉴于我对web一窍不通，并没有尝试去做flag2和3
 
 ## 汉化绿色版免费下载
 
@@ -504,24 +541,99 @@ btw，you are the master of lagrange，为什么是lagrange
 
 ## 猫猫状态监视器
 
+这道题一开始完全没有头绪，看了二阶段的提示之后就去看/usr/sbin/service的源码
+
+之前只用过非常有限的shell的功能（例如ls cd touch makedir 之类的），所以看shell脚本实在是非常痛苦。在gpt的帮助下勉强看懂了一点，然后去菜鸟教程看了一下shell的语法，好像更懂了一点
+
+大概的逻辑就是，先判断一下参数的个数，1个的情况，如果是--status-all，就去/etc/init.d里面找，符合条件的就输出出来，其他情况跟这题没啥关系就不管了（其实这个也没啥关系）
+
+然后，判断一下系统有没有在用systemd，如果有的话就调用systemctl status "输入的服务名字去掉.sh加上.service"，如果没有的话就去/etc/init.d里面找
+
+（不用人话说非用什么-gt -d -n -x看着真费劲）
+
+所以说我们应该怎么利用这个东西去访问/flag.txt呢 我也不知道，所以去搜了一下
+
+首先第一个想法是用;分割命令，然后输入类似a; cat flag.txt之类的东西，但是试了一下发现不行，因为服务器上运行的python脚本里面是用过subprocess.Popen来调用/usr/sbin/service的，并且shell = false，所以并不是用shell执行的，所以;没有用>
+```python
+def run(cmd):
+    argv = shlex.split(cmd)
+    pipe = subprocess.Popen(
+        argv,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=False)
+    status_output, error = pipe.communicate()
+    return status_output.decode("utf-8")
+```
+
+这样的话就只能从/usr/sbin/service本身下手了 然后搜到了一种方法叫路径穿透，就是输入../../flag.txt之类的东西，这样如果对用户输入处理的不好的话就能直接通过访问到flag.txt 然后试了一下，直接这么输（/usr/sbin/service ../../flag.txt） 因为这个时候只有一个参数，所以会直接用/etc/init.d 然后就路径穿透过去了 但是运行python脚本之后输这个就不行，因为有两个参数，然后就会用systemtcl，然后这个东西应该是做了防护的，会把/替换成-，然后就不行了
+
+然后就不知道该怎么办了，遂放弃
+
+但是反馈问卷里这道题后面好像就写的是路径穿透，所以应该怎么做捏
+
 ## baby stack
 
+最后一天基本上就是在研究ROP,也就是初学C语言的flag2和baby stack
+
+初学C语言的flag2的二阶段提示是，printf有一种特殊的用法，这种用法下可以把数据写入变量，然后问了一下gpt，gpt告诉我是%n，能把之前输出的字符数量写入变量里。但是那道题最多只能输入1023个字符 诶 我傻了 但是我可以输好多%p这样就会输出很多字符 好吧但是总而言之 就算ROP我能把rip设成什么呢 这里面也没什么代码能访问到flag2啊 总而言之就放弃了
+
+然后就来看这道baby stack，放一下源代码
+
+```c++
+#include <stdio.h>
+void backdoor(){
+    system("/bin/sh");
+}
+void get_line(char* buffer,int size){
+    unsigned int i=0;
+    for(i=0;i<size-1;i++){
+        read(0,buffer+i,1);
+        if(buffer[i]=='\n'){
+            buffer[i]='\0';
+            break;
+        }
+    }
+}
+void init(){
+    setvbuf(stdin, 0, 2, 0);
+    setvbuf(stdout, 0, 2, 0);
+    setvbuf(stderr, 0, 2, 0);
+}
+int main(){
+    init();
+    char buffer[100]="\0";
+    printf("Welcome to babystack:)\n");
+    int size;
+    printf("input the size of your exploitation string:(less than 100 chars with the ending \\n or EOF included!)\n");
+    scanf("%d",&size);
+    if((size>100)||(size<0)){
+        printf(":(\n");return 0;
+    }
+    printf("please input your string:\n");
+    get_line(buffer,size);
+    return 0;
+}
+```
+显然这个backdoor函数存在的意义就是让我们把rip设成这个，那么我们应该怎么达成这个目的呢
+
+二阶段的提示里说，这是integer overflow加stack overflow，所以说应该是先让size溢出一下，然后再写过长的东西到buffer里面，把rip覆盖掉
+
+但是这个size设了很严格的保护，小于0和大于100都不行，还去看了一下反汇编出来的，size直接是unsigned int，这样的话get_line里面读进去的就是不能超过100个字符 所以就完全不知道怎么办了
+
+然后我突发奇想想能不能直接往size里面写，把rip覆盖掉 然后我就去看size和栈底的距离有多大，这里发生了一件怪事，就是我用gdb p $rbp的时候它告诉我$rbp是0x1 现在也没明白是怎么回事，但是总之我还是通过奇怪的方法，好像是从反汇编里看到size应该在栈底0xc的位置，所以我只需要输0xc个1，然后再加上backdoor的地址就可以了
+
+但显然这么干是过于天马行空了，完全忽略了scanf 是怎么处理%d的，事实上不管怎么样它都只会往size之后的4个字节上写东西，所以我肯定是写不到存rip的那个位置去的
+
+进行到这里的时候基本上已经6点了，我甚至已经在等着结束了，然后我人生中的第一场ctf就这样结束了
+
+### 尾声
+
+以上的一切说起来轻巧，回过头来看好像根本不需要那么多时间，应该很快就完事了。但是中间应该还是夹杂着不少没有写出，可能我现在也已经忘掉了的弯路。就以距离最近，印象最新的rop来说，我所做的事看起来等于没有，可是看ctf wiki，学习汇编，了解比如说pop $rbp = sub rsp 8  mov rbp rsp， 栈帧到底是什么样的，rip里存着什么之类的东西，还是花了不少（一两个小时）时间的，然后各种摸索gdb应该怎么用，怎么在没有调试信息的情况下用，怎么把断点设在某个地址上之类的各种问题也用了不少时间。然而就算只过了几天，其中的艰辛，当时的精神状态也几乎都被忘掉了。这么说来写一篇wp还是很有必要的。
 
 
-###
+回过头来看还是学了不少东西了，但是现在大概连当初不会什么也不记得了，所以也说不出学到了什么东西（
 
-唉，好像即使没过几天，几天前的记忆也几乎丧失了
-
-虽然还记得干了什么事情，但是做这件事情的具体经过、以及当时的情感、状态，几乎都被忘记了 （无用信息过滤吗x 
-
-所以说写一些wp还是有必要的吧
-
-最后总结一下，有什么收获呢
-
-首先读了很多英语(x，确实很多英语的东西质量很不错，比什么csdn之类的好多了，就是看的太慢了
-
-然后知道了许多好用的软件和小工具之类的东西，并且把我的wsl配置好了，更熟悉linux的基本用法和一些概念了（比如说pipe）
-
-有了一点逆向以及pwn基础，似乎学会了基本的ROP，对汇编、栈帧之类的东西有了更多的了解
+web方面还需要好好努力啊
 
 很好玩的比赛，明年还来玩
